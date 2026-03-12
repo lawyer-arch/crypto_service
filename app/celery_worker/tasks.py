@@ -2,7 +2,7 @@ import asyncio
 import time
 
 from app.deribit_client.client import DeribitClient
-from app.db.models import Price
+from app.db.models import Prices
 from app.db.session import SessionLocal
 from .celery_app import celery_app
 
@@ -22,7 +22,7 @@ def fetch_prices():
 
                 price = await client.get_index_price(ticker)
 
-                obj = Price(
+                obj = Prices(
                     ticker=ticker,
                     price=price,
                     timestamp=int(time.time())
