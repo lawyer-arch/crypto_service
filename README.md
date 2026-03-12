@@ -1,2 +1,2 @@
-# crypto_service
+# Crypto Price Service
 Клиент для криптобиржи. Парсит цены.
