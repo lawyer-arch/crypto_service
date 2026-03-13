@@ -8,9 +8,13 @@ celery_app = Celery(
     backend=settings.REDIS_URL
 )
 
+# регистрация задачи (ВАЖНО)
+celery_app.autodiscover_tasks(["app.celery_worker"])
+
+# настройка запроса каждые 60 секунд
 celery_app.conf.beat_schedule = {
     "fetch_prices_every_minute": {
-        "task": "app.workers.tasks.fetch_prices",
+        "task": "app.celery_worker.tasks.fetch_prices",
         "schedule": 60.0,
     }
 }

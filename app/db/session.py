@@ -1,17 +1,18 @@
-import asyncio
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from app.core.config import settings
 from .models import Base
 
 
-engine = create_async_engine(settings.DATABASE_URL)
+engine_sync = create_engine(settings.DATABASE_URL)
 
-SessionLocal = async_sessionmaker(
-    engine,
-    expire_on_commit=False
+SessionLocalSync = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine_sync
 )
 
 
-async def init_models():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+def init_models_sync():
+    # синхронно создаём таблицы один раз
+    Base.metadata.create_all(bind=engine_sync)
